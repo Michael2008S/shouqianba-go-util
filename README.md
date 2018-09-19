@@ -1,2 +1,2 @@
 # shouqianba-go-util
-shouqianba util fo golang
+shouqianba util for golang

@@ -20,7 +20,7 @@ func sortMap(data map[string]string) string {
 }
 
 func getClient_Sn(codeLenth int) (code string) {
-	s := "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	s := "1234567890"
 	t := time.Now().UTC()
 	r := rand.New(rand.NewSource(t.UnixNano()))
 	for i := 0; i < codeLenth; i++ {

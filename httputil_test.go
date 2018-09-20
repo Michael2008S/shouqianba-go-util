@@ -11,27 +11,29 @@ const (
 	code       = ""
 )
 
+const (
+	TerminalSn  = ""
+	TerminalKey = ""
+)
+
 func TestActivate(t *testing.T) {
-	ar, err := Activate(vendor_sn, vendor_key, code)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	fmt.Println(ar.BizResponse.TerminalKey, ar.BizResponse.TerminalSn)
-	cir, err := CheckIn(ar.BizResponse.TerminalSn, ar.BizResponse.TerminalKey)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	fmt.Println(cir)
+	// ar, err := Activate(vendor_sn, vendor_key, code)
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+	// fmt.Println(ar.BizResponse.TerminalKey, ar.BizResponse.TerminalSn)
 
 	params := map[string]string{
 		"description":  "WWWwww",
 		"client_sn":    getClient_Sn(16),
-		"notify_url":   "http://localhost:3000/api/payment/callback",
-		"total_amount": "1",
+		"notify_url":   "http://www.baidu.com",
+		"total_amount": "10",
 		"return_url":   "https://www.baidu.com",
-		"terminal_sn":  cir.BizResponse.TerminalSn,
+		"terminal_sn":  TerminalSn,
 		"subject":      "Pizza",
 		"operator":     "kay", //门店操作员
 	}
-	WapApiPro(cir.BizResponse.TerminalSn, cir.BizResponse.TerminalKey, params)
+	payurl := WapApiPro(TerminalSn, TerminalKey, params)
+
+	fmt.Println("payurl++++>", payurl)
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 const (
@@ -62,9 +63,10 @@ func CheckIn(terminal_sn, terminal_key string) (CheckInResult, error) {
 }
 
 func WapApiPro(terminal_sn, terminal_key string, params map[string]string) string {
-	sortMap(params)
-
-	return WAP_API_PRO_URL
+	sortStr := sortMap(params)
+	fmt.Println(sortStr)
+	sign := strings.ToUpper(getSign(sortStr + "&key=" + terminal_key))
+	return WAP_API_PRO_URL + sortStr + "&sign=" + sign
 }
 
 type ActivateResult struct {

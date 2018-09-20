@@ -25,7 +25,7 @@ func TestActivate(t *testing.T) {
 
 	params := map[string]string{
 		"description":  "WWWwww",
-		"client_sn":    getClient_Sn(16),
+		"client_sn":    GetClient_Sn(16),
 		"notify_url":   "http://www.baidu.com",
 		"total_amount": "10",
 		"return_url":   "https://www.baidu.com",

@@ -15,6 +15,8 @@ const (
 	ACTIVATE_URL = "/terminal/activate"
 	CHECKIN_URL  = "/terminal/checkin"
 
+	QUERY_URL = "/upay/v2/query"
+
 	WAP_API_PRO_URL = "https://m.wosai.cn/qr/gateway?"
 )
 
@@ -62,6 +64,26 @@ func CheckIn(terminal_sn, terminal_key string) (CheckInResult, error) {
 	return cir, nil
 }
 
+func Query(terminal_sn, terminal_key, sn, client_sn string) (QueryResult, error) {
+	var query QueryResult
+	m := map[string]string{
+		"terminal_sn": terminal_sn,
+		"sn":          sn,
+		"client_sn":   client_sn,
+	}
+	mJson, _ := json.Marshal(m)
+	sign := getSign(string(mJson) + terminal_key)
+	body, err := httpPost(API_DOMAIN+QUERY_URL, mJson, sign, terminal_sn)
+	if err != nil {
+		return query, err
+	}
+	fmt.Println(string(body))
+	if err := json.Unmarshal(body, &query); err != nil {
+		return query, err
+	}
+	return query, nil
+}
+
 func WapApiPro(terminal_sn, terminal_key string, params map[string]string) string {
 	sortStr := sortMap(params)
 	fmt.Println(sortStr)
@@ -91,6 +113,41 @@ type CheckInResult struct {
 		TerminalSn   string `json:"terminal_sn"`
 	} `json:"biz_response"`
 	ResultCode string `json:"result_code"`
+}
+
+type QueryResult struct {
+	BizResponse struct {
+		Data struct {
+			ChannelFinishTime string `json:"channel_finish_time"`
+			ClientSn          string `json:"client_sn"`
+			ClientTsn         string `json:"client_tsn"`
+			Description       string `json:"description"`
+			FinishTime        string `json:"finish_time"`
+			NetAmount         string `json:"net_amount"`
+			Operator          string `json:"operator"`
+			OrderStatus       string `json:"order_status"`
+			PayerLogin        string `json:"payer_login"`
+			PayerUID          string `json:"payer_uid"`
+			PaymentList       []struct {
+				AmountTotal string `json:"amount_total"`
+				Type        string `json:"type"`
+			} `json:"payment_list"`
+			Payway      string `json:"payway"`
+			PaywayName  string `json:"payway_name"`
+			Sn          string `json:"sn"`
+			Status      string `json:"status"`
+			SubPayway   string `json:"sub_payway"`
+			Subject     string `json:"subject"`
+			TotalAmount string `json:"total_amount"`
+			TradeNo     string `json:"trade_no"`
+		} `json:"data"`
+		ErrorCode    string `json:"error_code"`
+		ErrorMessage string `json:"error_message"`
+		ResultCode   string `json:"result_code"`
+	} `json:"biz_response"`
+	ErrorCode    string `json:"error_code"`
+	ErrorMessage string `json:"error_message"`
+	ResultCode   string `json:"result_code"`
 }
 
 func httpPost(url string, mJson []byte, sign, sn string) ([]byte, error) {

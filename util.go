@@ -11,7 +11,9 @@ func sortMap(data map[string]string) string {
 	var sortStrArr []string
 
 	for k, v := range data {
-		sortStrArr = append(sortStrArr, k+"="+v)
+		if len(v) > 0 {
+			sortStrArr = append(sortStrArr, k+"="+v)
+		}
 	}
 	sort.Strings(sortStrArr)
 	sortStr := strings.Join(sortStrArr, "&")

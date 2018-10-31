@@ -17,6 +17,10 @@ const (
 
 	QUERY_URL = "/upay/v2/query"
 
+	CANCEL_URL = "/upay/v2/cancel"
+
+	REVOKE_URL = "/upay/v2/revoke"
+
 	WAP_API_PRO_URL = "https://m.wosai.cn/qr/gateway?"
 )
 
@@ -82,6 +86,38 @@ func Query(terminal_sn, terminal_key, sn, client_sn string) (QueryResult, error)
 		return query, err
 	}
 	return query, nil
+}
+
+//自动撤单
+func Cancel(terminal_sn, terminal_key, sn, client_sn string) {
+	m := map[string]string{
+		"terminal_sn": terminal_sn,
+		"sn":          sn,
+		"client_sn":   client_sn,
+	}
+	mJson, _ := json.Marshal(m)
+	sign := getSign(string(mJson) + terminal_key)
+	body, err := httpPost(API_DOMAIN+CANCEL_URL, mJson, sign, terminal_sn)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(body))
+}
+
+//手动撤单 (退款)
+func Revoke(terminal_sn, terminal_key, sn, client_sn string) {
+	m := map[string]string{
+		"terminal_sn": terminal_sn,
+		"sn":          sn,
+		"client_sn":   client_sn,
+	}
+	mJson, _ := json.Marshal(m)
+	sign := getSign(string(mJson) + terminal_key)
+	body, err := httpPost(API_DOMAIN+REVOKE_URL, mJson, sign, terminal_sn)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(body))
 }
 
 func WapApiPro(terminal_sn, terminal_key string, params map[string]string) string {

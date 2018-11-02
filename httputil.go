@@ -102,7 +102,6 @@ func Cancel(terminal_sn, terminal_key, sn, client_sn string) (CancelResult, erro
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("---cancel--->", string(body))
 	if err := json.Unmarshal(body, &cancel); err != nil {
 		return cancel, err
 	}

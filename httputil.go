@@ -21,7 +21,7 @@ const (
 
 	REVOKE_URL = "/upay/v2/revoke"
 
-	WAP_API_PRO_URL = "https://m.wosai.cn/qr/gateway?"
+	WAP_API_PRO_URL = "https://qr.shouqianba.com/gateway?"
 )
 
 func Activate(vendor_sn, vendor_key, code string) (ActivateResult, error) {

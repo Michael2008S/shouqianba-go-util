@@ -89,7 +89,8 @@ func Query(terminal_sn, terminal_key, sn, client_sn string) (QueryResult, error)
 }
 
 //自动撤单
-func Cancel(terminal_sn, terminal_key, sn, client_sn string) {
+func Cancel(terminal_sn, terminal_key, sn, client_sn string) (CancelResult, error) {
+	var cancel CancelResult
 	m := map[string]string{
 		"terminal_sn": terminal_sn,
 		"sn":          sn,
@@ -102,6 +103,10 @@ func Cancel(terminal_sn, terminal_key, sn, client_sn string) {
 		fmt.Println(err)
 	}
 	fmt.Println("---cancel--->", string(body))
+	if err := json.Unmarshal(body, &cancel); err != nil {
+		return cancel, err
+	}
+	return cancel, nil
 }
 
 //手动撤单 (退款)
@@ -176,6 +181,36 @@ type QueryResult struct {
 			Subject     string `json:"subject"`
 			TotalAmount string `json:"total_amount"`
 			TradeNo     string `json:"trade_no"`
+		} `json:"data"`
+		ErrorCode    string `json:"error_code"`
+		ErrorMessage string `json:"error_message"`
+		ResultCode   string `json:"result_code"`
+	} `json:"biz_response"`
+	ErrorCode    string `json:"error_code"`
+	ErrorMessage string `json:"error_message"`
+	ResultCode   string `json:"result_code"`
+}
+
+type CancelResult struct {
+	BizResponse struct {
+		Data struct {
+			ChannelFinishTime string `json:"channel_finish_time"`
+			ClientSn          string `json:"client_sn"`
+			ClientTsn         string `json:"client_tsn"`
+			FinishTime        string `json:"finish_time"`
+			NetAmount         string `json:"net_amount"`
+			Operator          string `json:"operator"`
+			OrderStatus       string `json:"order_status"`
+			PayerLogin        string `json:"payer_login"`
+			PayerUID          string `json:"payer_uid"`
+			Payway            string `json:"payway"`
+			PaywayName        string `json:"payway_name"`
+			Sn                string `json:"sn"`
+			Status            string `json:"status"`
+			SubPayway         string `json:"sub_payway"`
+			Subject           string `json:"subject"`
+			TotalAmount       string `json:"total_amount"`
+			TradeNo           string `json:"trade_no"`
 		} `json:"data"`
 		ErrorCode    string `json:"error_code"`
 		ErrorMessage string `json:"error_message"`

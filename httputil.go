@@ -101,7 +101,7 @@ func Cancel(terminal_sn, terminal_key, sn, client_sn string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(body))
+	fmt.Println("---cancel--->", string(body))
 }
 
 //手动撤单 (退款)
@@ -117,7 +117,7 @@ func Revoke(terminal_sn, terminal_key, sn, client_sn string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(body))
+	fmt.Println("----revoke--->", string(body))
 }
 
 func WapApiPro(terminal_sn, terminal_key string, params map[string]string) string {
